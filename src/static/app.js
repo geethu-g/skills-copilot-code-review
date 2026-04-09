@@ -1086,20 +1086,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (currentEditingAnnouncementId) {
         // Update announcement
-        endpoint = `/announcements/${currentEditingAnnouncementId}?username=${encodeURIComponent(
-          currentUser.username
-        )}`;
+        const params = new URLSearchParams({
+          username: currentUser.username,
+          title,
+          message,
+          expiration_date: expirationDateISO,
+        });
+
+        if (startDateISO) {
+          params.append("start_date", startDateISO);
+        }
+
+        endpoint = `/announcements/${currentEditingAnnouncementId}?${params.toString()}`;
         response = await fetch(endpoint, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title,
-            message,
-            start_date: startDateISO,
-            expiration_date: expirationDateISO,
-          }),
         });
       } else {
         // Create new announcement
