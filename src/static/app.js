@@ -904,11 +904,22 @@ document.addEventListener("DOMContentLoaded", () => {
         banner.className = "announcement-banner";
         banner.setAttribute("aria-live", "polite");
 
-        const title = announcement.title
-          ? `<strong>${announcement.title}:</strong> `
-          : "";
-        banner.innerHTML = `<span aria-hidden="true">📢</span> ${title}${announcement.message}`;
+        const icon = document.createElement("span");
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = "📢";
+        banner.appendChild(icon);
+        banner.appendChild(document.createTextNode(" "));
 
+        if (announcement.title) {
+          const title = document.createElement("strong");
+          title.textContent = `${announcement.title}:`;
+          banner.appendChild(title);
+          banner.appendChild(document.createTextNode(" "));
+        }
+
+        banner.appendChild(
+          document.createTextNode(announcement.message == null ? "" : String(announcement.message))
+        );
         announcementsBannerContainer.appendChild(banner);
       });
     } catch (error) {
